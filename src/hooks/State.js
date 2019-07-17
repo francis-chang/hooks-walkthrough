@@ -1,14 +1,21 @@
 import React, { useEffect, useState } from "react";
 import { Hello } from "./Effect";
+import { useFetch } from "./useFetch";
 import { useForm } from "./useForm";
 const State = () => {
-    const [count, setCount] = useState(0);
+    const [count, setCount] = useState(() =>
+        JSON.parse(localStorage.getItem("count"))
+    );
     const [values, setValues] = useForm({
         email: "",
         password: "",
         firstName: ""
     });
     const [showHello, setShowHello] = useState(false);
+
+    const { data, loading } = useFetch(
+        `https://jsonplaceholder.typicode.com/todos/${count}`
+    );
 
     useEffect(() => {
         const onMouseMove = e => {
@@ -26,8 +33,13 @@ const State = () => {
         console.log("hi");
     }, []);
 
+    useEffect(() => {
+        localStorage.setItem("count", JSON.stringify(count));
+    }, [count]);
+
     return (
         <>
+            <div>{loading ? "loading..." : data.title}</div>
             {showHello && <Hello />}
             <br />
             <button onClick={() => setShowHello(current => !current)}>
