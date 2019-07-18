@@ -21,10 +21,10 @@ const State = () => {
         const onMouseMove = e => {
             console.log(e);
         };
-        window.addEventListener("mousemove", onMouseMove);
+        // window.addEventListener("mousemove", onMouseMove);
         // cleanup function
         return () => {
-            window.removeEventListener("mousemove", onMouseMove);
+            // window.removeEventListener("mousemove", onMouseMove);
         };
     }, []);
 
