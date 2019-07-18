@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Hello } from "./Effect";
 import { useFetch } from "./useFetch";
 import { useForm } from "./useForm";
@@ -17,6 +17,9 @@ const State = () => {
         `https://jsonplaceholder.typicode.com/todos/${count}`
     );
 
+    const divRef = useRef();
+    const [rect, setRect] = useState({});
+
     useEffect(() => {
         const onMouseMove = e => {
             console.log(e);
@@ -27,6 +30,10 @@ const State = () => {
             // window.removeEventListener("mousemove", onMouseMove);
         };
     }, []);
+
+    useLayoutEffect(() => {
+        setRect(divRef.current.getBoundingClientRect());
+    }, [data]);
 
     //multiple useEffects
     useEffect(() => {
@@ -39,7 +46,10 @@ const State = () => {
 
     return (
         <>
-            <div>{loading ? "loading..." : data.title}</div>
+            <div style={{ display: "flex" }}>
+                <div ref={divRef}>{loading ? "loading..." : data.title}</div>
+            </div>
+            <pre>{JSON.stringify(rect, null, 2)}</pre>
             {showHello && <Hello />}
             <br />
             <button onClick={() => setShowHello(current => !current)}>
